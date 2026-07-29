@@ -11,6 +11,12 @@ const LoginPage = lazy(() => import('../pages/LoginPage').then(m => ({ default: 
 const RegisterPage = lazy(() => import('../pages/RegisterPage').then(m => ({ default: m.RegisterPage })));
 const ForgotPasswordPage = lazy(() => import('../pages/ForgotPasswordPage').then(m => ({ default: m.ForgotPasswordPage })));
 
+const ResetPasswordPage = lazy(() =>
+  import("../pages/ResetPasswordPage").then((m) => ({
+    default: m.ResetPasswordPage,
+  })),
+);
+
 const DashboardOverviewPage = lazy(() => import('../pages/DashboardOverviewPage').then(m => ({ default: m.DashboardOverviewPage })));
 const NotesPage = lazy(() => import('../pages/NotesPage').then(m => ({ default: m.NotesPage })));
 const ArchivedPage = lazy(() => import('../pages/ArchivedPage').then(m => ({ default: m.ArchivedPage })));
@@ -28,6 +34,7 @@ export function AppRoutes() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
         </Route>
 
         {/* Authenticated Routes with Notes Provider & Workspace Layout */}

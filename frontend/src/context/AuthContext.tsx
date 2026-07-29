@@ -8,11 +8,18 @@ interface AuthContextType {
   loading: boolean;
   isConfigured: boolean;
   login: (email: string, password: string) => Promise<{ error: Error | null }>;
-  register: (email: string, password: string, fullName?: string) => Promise<{ error: Error | null }>;
+  register: (
+    email: string,
+    password: string,
+    fullName?: string,
+  ) => Promise<{ error: Error | null }>;
   logout: () => Promise<{ error: Error | null }>;
   forgotPassword: (email: string) => Promise<{ error: Error | null }>;
+  updatePassword: (password: string) => Promise<{ error: Error | null }>;
   updateProfile: (fullName: string) => Promise<{ error: Error | null }>;
-  updateAvatarUrl: (avatarUrl: string | null) => Promise<{ error: Error | null }>;
+  updateAvatarUrl: (
+    avatarUrl: string | null,
+  ) => Promise<{ error: Error | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -98,11 +105,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const forgotPassword = async (email: string) => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/login`,
+        redirectTo: `${window.location.origin}/reset-password`,
       });
       return { error: error ? new Error(error.message) : null };
     } catch (err: unknown) {
       return { error: err instanceof Error ? err : new Error('Password reset failed') };
+    }
+  };
+
+  const updatePassword = async (password: string) => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password,
+      });
+
+      return {
+        error: error ? new Error(error.message) : null,
+      };
+    } catch (err: unknown) {
+      return {
+        error:
+          err instanceof Error ? err : new Error("Failed to update password"),
+      };
     }
   };
 
@@ -155,6 +179,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         register,
         logout,
         forgotPassword,
+        updatePassword,
         updateProfile,
         updateAvatarUrl,
       }}
