@@ -10,6 +10,13 @@ const app = express();
 app.use(cors({ origin: config.corsOrigin }));
 app.use(express.json());
 
+app.get("/", (_req, res) => {
+  res.json({
+    success: true,
+    message: "Notes App Backend API is running 🚀",
+  });
+});
+
 // Legacy/Root Health Check endpoint (Requirement 6)
 app.get('/api/health', getHealth);
 
